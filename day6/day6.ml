@@ -8,5 +8,5 @@ let soc c s =
   String.split_on_char c s |> Array.of_list
 
 let () =
-  let file = read_lines (open_in "tay.txt") |> Array.of_list in
+  let file = read_lines (open_in "tay6.txt") |> Array.of_list in
   Array.iter print_string file
