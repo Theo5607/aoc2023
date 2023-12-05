@@ -9,9 +9,6 @@ let rec print_list =
     [] -> ()
   | e::l -> print_string e ; print_string "\n" ; print_list l
 
-let is_digit c =
-  let chiffres = [|'0';'1';'2';'3';'4';'5';'6';'7';'8';'9'|] in
-  Array.mem c chiffres
 
 let is_symbol c =
   let symb = [|'+';'*';'$';'&';'#';'/';'@';'=';'%';'-'|] in
