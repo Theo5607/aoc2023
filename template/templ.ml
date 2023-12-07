@@ -9,4 +9,4 @@ let soc c s =
 
 let () =
   let file = read_lines (open_in "tay.txt") |> Array.of_list in
-  Array.iter print_string file
+  Array.iter print_string file 
