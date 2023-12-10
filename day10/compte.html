@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Count White 3x3 Squares</title>
+</head>
+<body>
+
+<input type="file" id="fileInput" accept="image/*" />
+<br />
+<button onclick="countWhiteSquares()">Count White 3x3 Squares</button>
+<br />
+<p id="result">Le nombre de carrés 3x3 entièrement blancs est : <span id="count">0</span></p>
+<canvas id="imageCanvas" style="border:1px solid;"></canvas>
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', handleFile);
+
+    function handleFile(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const imageData = e.target.result;
+                displayImage(imageData);
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function displayImage(imageData) {
+        const canvas = document.getElementById('imageCanvas');
+        const context = canvas.getContext('2d');
+        const image = new Image();
+
+        image.onload = function () {
+            canvas.width = image.width;
+            canvas.height = image.height;
+            context.drawImage(image, 0, 0, image.width, image.height);
+        };
+
+        image.src = imageData;
+    }
+
+    function countWhiteSquares() {
+        const canvas = document.getElementById('imageCanvas');
+        const context = canvas.getContext('2d');
+        const squareSize = 3;
+
+        let whiteSquareCount = 0;
+
+        for (let y = 0; y < canvas.height; y += squareSize) {
+            for (let x = 0; x < canvas.width; x += squareSize) {
+                let isWhiteSquare = true;
+
+                for (let squareY = 0; squareY < squareSize; squareY++) {
+                    for (let squareX = 0; squareX < squareSize; squareX++) {
+                        const pixel = context.getImageData(x + squareX, y + squareY, 1, 1).data;
+
+                        if (!isWhitePixel(pixel)) {
+                            isWhiteSquare = false;
+                            break;
+                        }
+                    }
+
+                    if (!isWhiteSquare) {
+                        break;
+                    }
+                }
+
+                if (isWhiteSquare) {
+                    whiteSquareCount++;
+                }
+            }
+        }
+
+        document.getElementById('count').textContent = whiteSquareCount;
+    }
+
+    function isWhitePixel(pixel) {
+        return pixel[0] === 255 && pixel[1] === 255 && pixel[2] === 255;
+    }
+</script>
+
+</body>
+</html>
+

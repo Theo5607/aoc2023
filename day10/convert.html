@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Pixel Converter</title>
+</head>
+<body>
+
+<input type="file" id="fileInput" accept=".txt" />
+<br />
+<button onclick="convertTextToPixels()">Convert Text to Pixels</button>
+<br />
+<canvas id="pixelCanvas" style="border:1px solid;"></canvas>
+
+<script>
+    document.getElementById('fileInput').addEventListener('change', handleFile);
+
+    function handleFile(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                const content = e.target.result;
+                drawPixels(content);
+            };
+
+            reader.readAsText(file);
+        }
+    }
+
+    function drawPixels(content) {
+        const canvas = document.getElementById('pixelCanvas');
+        const context = canvas.getContext('2d');
+
+        // Calculer la largeur et la hauteur du canevas en fonction du contenu
+        const lines = content.split('\n');
+        const canvasWidth = lines.reduce((max, line) => Math.max(max, line.length), 0);
+        const canvasHeight = lines.length;
+
+        // Ajuster la taille du canevas
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+
+        const pixelSize = 1; // Taille de chaque pixel
+        const colors = ['#000000', '#FF0000', '#00FF00', '#0000FF']; // Vous pouvez personnaliser les couleurs ici
+
+        for (let row = 0; row < canvasHeight; row++) {
+            for (let col = 0; col < canvasWidth; col++) {
+                const char = lines[row][col];
+
+                if (char === undefined || char === '\n') {
+                    continue; // Ne dessine pas de pixels pour les caractères indéfinis ou de saut de ligne
+                }
+
+                const color = colors[char.charCodeAt(0) % colors.length];
+
+                context.fillStyle = color;
+                context.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize);
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
+ml>
